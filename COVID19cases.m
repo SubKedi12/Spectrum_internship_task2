@@ -1,0 +1,120 @@
+function varargout = COVID19cases(varargin)
+gui_Singleton = 1;
+gui_State = struct('gui_Name',       mfilename, ...
+                   'gui_Singleton',  gui_Singleton, ...
+                   'gui_OpeningFcn', @COVID19cases_OpeningFcn, ...
+                   'gui_OutputFcn',  @COVID19cases_OutputFcn, ...
+                   'gui_LayoutFcn',  [] , ...
+                   'gui_Callback',   []);
+if nargin && ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+end
+
+if nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+else
+    gui_mainfcn(gui_State, varargin{:});
+end
+
+
+function COVID19cases_OpeningFcn(hObject, eventdata, handles, varargin)
+handles.output = hObject;
+guidata(hObject, handles);
+
+
+function varargout = COVID19cases_OutputFcn(hObject, eventdata, handles) 
+varargout{1} = handles.output;
+
+
+function popupcountries_Callback(hObject, eventdata, handles)
+start=1;
+ends=1;
+cla(handles.axes1,'reset');
+str=cellstr(get(hObject,'String'));
+val=str{get(hObject,'Value')};
+switch val
+    case 'India'
+        start=246;
+        ends=365;
+    case 'Germany'
+        start=2;
+        ends=122;
+    case 'China'
+        start=124;
+        ends=244;
+    case 'Italy'
+        start=367;
+        ends=487;
+    case 'USA'
+        start=489;
+        ends=609;
+end
+global tablconf;
+tablconf=countriestab('data.xlsx','Sheet1',start,ends);
+casessum=sum(tablconf.cases);
+set(handles.edit3,'String',casessum);
+deathsum=sum(tablconf.deaths);
+set(handles.edit2,'String',deathsum);
+
+
+function popupcountries_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit2_Callback(hObject, eventdata, handles)
+
+
+function edit2_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+function pushbutton1_Callback(hObject, eventdata, handles)
+global tablconf;
+tables=tablconf;
+axes(handles.axes1);
+% plot(tables.dateRep,tables.cases);
+bar(tables.dateRep,tables.cases);
+grid on;
+
+
+
+function pushbutton2_Callback(hObject, eventdata, handles)
+global tablconf;
+tables=tablconf;
+axes(handles.axes1);
+% plot(tables.dateRep,tables.deaths);
+bar(tables.dateRep,tables.deaths);
+grid on;
+
+
+function pushbutton3_Callback(hObject, eventdata, handles)
+global tablconf;
+tables=tablconf;
+axes(handles.axes1);
+% plot(tables.dateRep,tables.cases);
+bar(tables.dateRep,tables.cases);
+grid on;
+hold on;
+% plot(tables.dateRep,tables.deaths);
+bar(tables.dateRep,tables.deaths);
+grid on;
+hold off;
+
+
+function popupcountries_ButtonDownFcn(hObject, eventdata, handles)
+
+
+
+
+function edit3_Callback(hObject, eventdata, handles)
+
+
+function edit3_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
